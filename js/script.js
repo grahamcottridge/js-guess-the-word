@@ -15,3 +15,24 @@ const message = document.querySelector(".message");
 // play again button
 const playAgain = document.querySelector(".play-again");
 
+// starting word
+const word = "ti";
+
+// function to add placeholders to each letter
+const placeholder = function (word) {
+  const placeholderLetters = [];
+  for (const letter of word) {
+    // console.log(letter);
+    placeholderLetters.push("●");
+  }
+  wordInProgress.innerText = placeholderLetters.join("");
+};
+
+placeholder(word);
+
+button.addEventListener("click", function (e) {
+  e.preventDefault()
+  const input = playerInput.value
+  // console.log(input)
+  playerInput.value = ""
+})
