@@ -16,7 +16,9 @@ const message = document.querySelector(".message");
 const playAgain = document.querySelector(".play-again");
 
 // starting word
-const word = "ti";
+const word = "Magnolia";
+// array of guessed letters inputted
+const guessedLetter = []
 
 // function to add placeholders to each letter
 const placeholder = function (word) {
@@ -30,6 +32,7 @@ const placeholder = function (word) {
 
 placeholder(word);
 
+// validate player input
 const validatePlayerInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/;
   if (input === "") {
@@ -44,9 +47,13 @@ const validatePlayerInput = function (input) {
 };
 // console.log(checkPlayerInput("t"));
 
+// Button event handler
 button.addEventListener("click", function (e) {
   e.preventDefault();
   const input = playerInput.value;
-  // console.log(input)
+  const guess = validatePlayerInput(input)
   playerInput.value = "";
+  console.log(guess)
 });
+
+
