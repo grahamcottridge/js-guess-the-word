@@ -30,9 +30,23 @@ const placeholder = function (word) {
 
 placeholder(word);
 
+const validatePlayerInput = function (input) {
+  const acceptedLetter = /[a-zA-Z]/;
+  if (input === "") {
+    return "Please enter a letter!";
+  } else if (input.length > 1) {
+    return "Please only enter one letter at a time!";
+  } else if (!input.match(acceptedLetter)) {
+    return "That's not a letter between A to Z!";
+  } else {
+    return input;
+  }
+};
+// console.log(checkPlayerInput("t"));
+
 button.addEventListener("click", function (e) {
-  e.preventDefault()
-  const input = playerInput.value
+  e.preventDefault();
+  const input = playerInput.value;
   // console.log(input)
-  playerInput.value = ""
-})
+  playerInput.value = "";
+});
