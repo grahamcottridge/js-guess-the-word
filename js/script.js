@@ -19,6 +19,8 @@ const playAgain = document.querySelector(".play-again");
 const word = "Magnolia";
 // array of guessed letters inputed
 const guessedLetters = [];
+// number of guesses
+let remainingGuesses = 8
 
 // Add placeholders for each letter of word to guess
 const placeholder = function (word) {
@@ -53,11 +55,11 @@ const makeGuess = function (letter) {
   if (guessedLetters.includes(guess)) {
     message.innerText = "You've already guessed that letter - try again!";
   } else {
-    guessedLetters.push(guess);
-    console.log(guessedLetters);
+    guessedLetters.push(guess);;
     // call function
     updateLetters();
-    // call function to update with guessed letters
+    // call function to update passing guessed letter
+    guessCount(guess)
   }
   updateWordInProgress(guessedLetters);
 };
@@ -86,12 +88,32 @@ const updateWordInProgress = function (guessedLetters) {
       revealWord.push("●");
     }
   }
-  // console.log(revealWord);
   // display wordInProgress
   wordInProgress.innerText = revealWord.join("");
   // run function
   playerWins()
 };
+
+// count guesses remaining
+const guessCount = function (guess) {
+  const upperWord = word.toUpperCase()
+  // check guess is in word and count guesses
+  if (upperWord.includes(guess)) {
+    message.innerText = `Good guess! The word has the letter ${guess}.`;
+  } else {
+    message.innerText = "That letter is not in the word - try again!";
+    remainingGuesses -= 1
+  }
+  // messages for number of guesses left
+  if (remainingGuesses === 0) {
+    message.innerText = "No more guesses left - game over!"
+    remainingText.innerText = `The word is ${word}.`;
+  } else if (remainingGuesses === 1) {
+    remainingNum.innerText = `${remainingGuesses} guess`;
+  } else {
+    remainingNum.innerText = `${remainingGuesses} guesses `
+  }
+}
 
 // check if player has won
 const playerWins = function () {
