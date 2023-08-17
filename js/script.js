@@ -16,14 +16,29 @@ const message = document.querySelector(".message");
 const playAgain = document.querySelector(".play-again");
 
 // starting word
-const word = "Magnolia";
+let word = "Magnolia";
 // array of guessed letters inputed
 const guessedLetters = [];
 // number of guesses
-let remainingGuesses = 8
+let remainingGuesses = 8;
+
+// Fetch words
+const getWord = async function () {
+  const res = await fetch(
+    "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"
+  );
+  const words = await res.text();
+  const wordArray = words.split("\n");
+  const randomIndex = Math.floor(Math.random() * wordArray.length);
+  word = wordArray[randomIndex].trim();
+  placeholder(word);
+};
+
+// Start game
+getWord();
 
 // Add placeholders for each letter of word to guess
-const placeholder = function (word) {
+const placeholder = function (randomWord) {
   const placeholderLetters = [];
   for (const letter of word) {
     placeholderLetters.push("●");
@@ -31,9 +46,7 @@ const placeholder = function (word) {
   wordInProgress.innerText = placeholderLetters.join("");
 };
 
-placeholder(word);
-
-// validate player input as a letter
+// Validate player input as a letter
 const validatePlayerInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/;
   if (input.length === 0) {
@@ -47,7 +60,7 @@ const validatePlayerInput = function (input) {
   }
 };
 
-// capture player input
+// Capture player input
 const makeGuess = function (letter) {
   // convert input to uppercase
   const guess = letter.toUpperCase();
@@ -55,16 +68,16 @@ const makeGuess = function (letter) {
   if (guessedLetters.includes(guess)) {
     message.innerText = "You've already guessed that letter - try again!";
   } else {
-    guessedLetters.push(guess);;
+    guessedLetters.push(guess);
     // call function
     updateLetters();
     // call function to update passing guessed letter
-    guessCount(guess)
+    guessCount(guess);
   }
   updateWordInProgress(guessedLetters);
 };
 
-// update page with player's guessed letters
+// Update page with player's guessed letters
 const updateLetters = function () {
   guessedLetterList.innerText = "";
   for (const letter of guessedLetters) {
@@ -74,7 +87,7 @@ const updateLetters = function () {
   }
 };
 
-// update word with player guesses
+// Update word with player guesses
 const updateWordInProgress = function (guessedLetters) {
   const wordUpper = word.toUpperCase();
   const wordArray = wordUpper.split("");
@@ -91,31 +104,30 @@ const updateWordInProgress = function (guessedLetters) {
   // display wordInProgress
   wordInProgress.innerText = revealWord.join("");
   // run function
-  playerWins()
+  playerWins();
 };
 
-// count guesses remaining
+// Count guesses remaining
 const guessCount = function (guess) {
-  const upperWord = word.toUpperCase()
+  const upperWord = word.toUpperCase();
   // check guess is in word and count guesses
-  if (upperWord.includes(guess)) {
-    message.innerText = `Good guess! The word has the letter ${guess}.`;
-  } else {
+  if (!upperWord.includes(guess)) {
     message.innerText = "That letter is not in the word - try again!";
-    remainingGuesses -= 1
+    remainingGuesses -= 1;
+  } else {
+    message.innerText = `Good guess! The word has the letter ${guess}.`;
   }
   // messages for number of guesses left
   if (remainingGuesses === 0) {
-    message.innerText = "No more guesses left - game over!"
-    remainingText.innerText = `The word is ${word}.`;
+    message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
   } else if (remainingGuesses === 1) {
     remainingNum.innerText = `${remainingGuesses} guess`;
   } else {
-    remainingNum.innerText = `${remainingGuesses} guesses `
+    remainingNum.innerText = `${remainingGuesses} guesses `;
   }
-}
+};
 
-// check if player has won
+// Check if player has won
 const playerWins = function () {
   if (word.toUpperCase() === wordInProgress.innerText) {
     message.classList.add("win");
