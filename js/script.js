@@ -18,7 +18,7 @@ const playAgain = document.querySelector(".play-again");
 // starting word
 let word = "Magnolia";
 // array of guessed letters inputed
-const guessedLetters = [];
+let guessedLetters = [];
 // number of guesses
 let remainingGuesses = 8;
 
@@ -120,6 +120,7 @@ const guessCount = function (guess) {
   // messages for number of guesses left
   if (remainingGuesses === 0) {
     message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
+    startOver()
   } else if (remainingGuesses === 1) {
     remainingNum.innerText = `${remainingGuesses} guess`;
   } else {
@@ -132,10 +133,21 @@ const playerWins = function () {
   if (word.toUpperCase() === wordInProgress.innerText) {
     message.classList.add("win");
     message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+    startOver()
   }
 };
 
-// Button event handler
+// Hide and show elements when game is finished
+const startOver = function () {
+  // hide elements
+  button.classList.add("hide")
+  remainingText.classList.add("hide")
+  guessedLetterList.classList.add("hide")
+  // show play again button
+  playAgain.classList.remove("hide")
+}
+
+// Guess button 
 button.addEventListener("click", function (e) {
   e.preventDefault();
   // clear message
@@ -151,3 +163,29 @@ button.addEventListener("click", function (e) {
   // clear input field
   playerInput.value = "";
 });
+
+// Reset game to play again
+playAgain.addEventListener("click", function (e) {
+  e.preventDefault()
+  // remove "win" class
+  message.classList.remove("win")
+  // clear message
+  message.innerText = "";
+  // clear list of letters
+  guessedLetterList.innerHTML = "";
+  // reset number of guesses
+  remainingGuesses = 8
+  // empty array of letters
+  guessedLetters = [];
+  // repopulate number of guesses display
+  remainingNum.innerText = `${remainingGuesses} guesses `;
+  // show number of guess remaining
+  remainingText.classList.remove("hide");
+  // show number of guesses back to default 
+  guessedLetterList.classList.remove("hide");
+  // swap buttons
+  button.classList.remove("hide");
+  playAgain.classList.add("hide");
+  // fetch new word
+  getWord();
+}) 
